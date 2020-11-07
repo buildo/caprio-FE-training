@@ -1,0 +1,54 @@
+{
+  "name": "caprio-fe-training-cra-bento",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@formatjs/intl-pluralrules": "^1.5.5",
+    "@formatjs/intl-relativetimeformat": "^4.5.12",
+    "@types/classnames": "^2.2.10",
+    "@types/fixed-data-table": "^0.6.35",
+    "@types/jest": "^24.0.0",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.9.0",
+    "avenger": "^7.0.0",
+    "buildo-react-components": "^0.48.1",
+    "classnames": "^2.2.6",
+    "cra-bundle-analyzer": "^0.1.0",
+    "es6-promise": "^4.2.8",
+    "fp-ts": "^2.6.6",
+    "io-ts": "^2.2.6",
+    "io-ts-types": "^0.5.7",
+    "node-sass": "^4.13.1",
+    "normalize-scss": "^7.0.0",
+    "react": "^16.13.1",
+    "react-app-polyfill": "^1.0.6",
+    "react-dom": "^16.13.1",
+    "react-flexview": "^4.0.4",
+    "react-intl": "^4.4.0",
+    "react-scripts": "4.0.0",
+    "scriptoni": "^9.0.0",
+    "typescript": "^3.8.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

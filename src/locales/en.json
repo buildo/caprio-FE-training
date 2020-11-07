@@ -1,0 +1,7 @@
+{
+  "locales": ["en"],
+  "messages": {
+    "Hello.hello": "Hello {name}!",
+    "Hello.warningQuantity": "name quantity must be between 6 and 50"
+  }
+}
