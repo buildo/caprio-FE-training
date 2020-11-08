@@ -14,13 +14,13 @@ export function addLocaleDataAndResolve(
   return (intl: _IntlData) => {
     if (!Intl.PluralRules) {
       require("@formatjs/intl-pluralrules/polyfill");
-      require(`@formatjs/intl-pluralrules/dist/locale-data/${locale}`);
+      require(`@formatjs/intl-pluralrules/locale-data/${locale}`);
     }
 
     //@ts-ignore
     if (!Intl.RelativeTimeFormat) {
       require("@formatjs/intl-relativetimeformat/polyfill");
-      require(`@formatjs/intl-relativetimeformat/dist/locale-data/${locale}`);
+      require(`@formatjs/intl-relativetimeformat/locale-data/${locale}`);
     }
 
     resolve({ ...intl, locale });
