@@ -23,12 +23,12 @@ in the example app created by default:
 
 import { HistoryLocation } from 'avenger/lib/browser';
 
-export type CurrentView = 'home' | 'hello';
+export type CurrentView = 'home' | 'detail';
 
 export function locationToView(location: HistoryLocation): CurrentView {
   switch (location.pathname) {
-    case '/hello':
-      return 'hello';
+    case '/detail':
+      return 'detail';
     default:
       return 'home';
   }
@@ -36,8 +36,8 @@ export function locationToView(location: HistoryLocation): CurrentView {
 
 export function viewToLocation(view: CurrentView): HistoryLocation {
   switch (view) {
-    case 'hello':
-      return { pathname: '/hello', search: {} };
+    case 'detail':
+      return { pathname: '/detail', search: {} };
     default:
       return { pathname: '/', search: {} };
   }

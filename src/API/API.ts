@@ -12,14 +12,14 @@ export const decodingError = (errors: t.Errors): ApiError => {
   return { type: "Decoding", description: description };
 };
 
-export const getRandomNames = (
-  quantity: number
+export const searchResturant = (
+  locationParam: string
 ): taskEither.TaskEither<ApiError, string[]> =>
   pipe(
     taskEither.tryCatch(
       () =>
         fetch(
-          `https://cors-anywhere.herokuapp.com/http://names.drycodes.com/${quantity}`
+          `https://api.yelp.com/v3/businesses/search?term=restaurants&location=${locationParam}`
         ).then((res) => res.json()),
       either.toError
     ),

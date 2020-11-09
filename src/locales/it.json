@@ -1,7 +1,6 @@
 {
   "locales": ["it"],
   "messages": {
-    "Hello.hello": "Ciao {name}!",
-    "Hello.warningQuantity": "il numero deve essere compreso tra 6 e 50"
+    "Homepage.results.title": "Search Results"
   }
 }

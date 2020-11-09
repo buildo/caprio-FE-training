@@ -11,11 +11,11 @@ import { locationToView } from "../model";
 
 export const currentView = getCurrentView(locationToView);
 
-export const randomNames = queryStrict(
+export const searchResturantQuery = queryStrict(
   // `queryStrict` will call this API when requested (declared in a component),
   // and use a "strict" comparison to compare input and retrieve cached results.
   // See https://github.com/buildo/avenger/blob/v5/README.md#queries
-  API.getRandomNames,
+  API.searchResturant,
   // using the `available` cache strategy means this value will be cached in memory
   // indefinitely after it is fetched for the first time
   available
