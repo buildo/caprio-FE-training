@@ -1,50 +1,51 @@
-import * as React from "react"
+import * as React from 'react';
 
-import { Input, Button } from 'buildo-react-components'
-import Dropdown from "../Dropdown";
+import { Input, Button } from 'buildo-react-components';
+import Dropdown from '../Dropdown';
+import View from '../View/View';
 
-import "./searchbar.scss";
-import View from "../View/View";
+const rangeOptions = [
+  { value: 1, label: '1 km' },
+  { value: 5, label: '5 km' },
+  { value: 10, label: '10 km' },
+  { value: 15, label: '15 km' },
+  { value: 25, label: '25 km' },
+  { value: 35, label: '35 km' },
+  { value: 50, label: '50 km' }
+];
 
-type RadiusType = { value: number; label: string };
+const SearchBar: React.FC = () => {
+  return (
+    <View      
+      hAlignContent="center"
+      vAlignContent="center"
+      basis={300}
+      className="search-bar"
+    >
+      {
+        <form>
+          <View vAlignContent="center">
+            <Input label="" placeholder="" value="" onChange={() => {}} />
 
-class SearchBar extends React.Component {
+            <Dropdown
+              options={rangeOptions}
+              value={{ value: 1, label: '1 km' }}
+              onChange={() => {}}
+            />
 
-    render() {
-        let tmpVal: string = 'Search Location'
-        
-        // TODO : 
-        const mockUpdateLocation = (val: String) => console.log(`Location ${val}`);
-        const mockUpdateRadius = (radius: RadiusType) => console.log(`Radius ${radius.label}`);
-        const mockPerformSearch = () => console.log('Search with Yelp API')
+            <Button
+              label="Search"
+              flat
+              onClick={() => {
+                /*TODO : Handle Range changes*/
+              }}
+              style={{ margin: 10, width: 100 }}
+            />
+          </View>
+        </form>
+      }
+    </View>
+  );
+};
 
-        const buttonProps = {
-            onClick: mockPerformSearch,
-            style: { margin: 10, width: 100 }
-          };
-
-        return (
-            <View width='100%'
-                hAlignContent='center'
-                vAlignContent='center'
-                basis={300}
-                className='search-bar'>
-
-                <form>
-                    <View vAlignContent='center'>
-                        <Input label="Location search :"
-                            value={tmpVal}
-                            onChange={mockUpdateLocation} />
-                        <Dropdown
-                            options={[{ value: 5, label: '5 km' }]}
-                            value={5}
-                            onChange={mockUpdateRadius} />
-                        <Button label="Search" flat {...buttonProps} />
-                    </View>
-                </form>
-            </View>
-        );
-    }
-}
-
-export default SearchBar
+export default SearchBar;
