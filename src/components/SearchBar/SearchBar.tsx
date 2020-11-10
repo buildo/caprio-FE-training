@@ -1,6 +1,8 @@
 import * as React from 'react';
 
-import { Input, Button } from 'buildo-react-components';
+import Input from '../SearchInput/SearchInput';
+import Button from '../SearchButton/SearchButton';
+
 import Dropdown from '../Dropdown';
 import View from '../View/View';
 import { RangeList, RangeOption, SearchBarState } from '../../model';
@@ -8,28 +10,24 @@ import { useIntl } from 'react-intl';
 
 import './searchbar.scss';
 
-const rangeOptions: RangeList = [
-  { value: 1, label: '1 km' },
-  { value: 5, label: '5 km' },
-  { value: 10, label: '10 km' },
-  { value: 15, label: '15 km' },
-  { value: 25, label: '25 km' },
-  { value: 35, label: '35 km' },
-  { value: 50, label: '50 km' }
-];
+const RANGES: Array<number> = [1, 5, 10, 15, 25, 35, 50];
 
 export function SearchBar() {
-  const [{ location, range }, setSearchParams] = React.useState<SearchBarState>({
-    location: '',
-    range: rangeOptions[0]
-  });
+  const intl = useIntl();
 
-  const locationSearchPlaceholder = useIntl().formatMessage({
+  const btnSearchLabel = intl.formatMessage({ id: 'SearchBar.button.search.cta' });
+  const locationSearchPlaceholder = intl.formatMessage({
     id: 'SearchBar.input.location.placeholder'
   });
 
-  const btnSearchLabel = useIntl().formatMessage({
-    id: 'SearchBar.button.search.cta'
+  const rangeOptions: RangeList = RANGES.map(value => ({
+    value: value,
+    label: intl.formatMessage({ id: 'SearchBar.dropdown.range.label' }, { range: value })
+  }));
+
+  const [{ location, range }, setSearchParams] = React.useState<SearchBarState>({
+    location: '',
+    range: rangeOptions[0]
   });
 
   const updateLocation = (input: string) => setSearchParams({ location: input, range });
@@ -38,22 +36,18 @@ export function SearchBar() {
     setSearchParams({ location: location, range: rangeInput });
 
   return (
-    <View vAlignContent="center" basis={300} className="search-bar">
+    <View vAlignContent="center" basis={400} className="search-bar">
       <Input
+        className="form-field location-input"
         label="Location"
         placeholder={locationSearchPlaceholder}
         value={location}
         onChange={updateLocation}
       />
 
-      <Dropdown
-        className="form-field"
-        options={rangeOptions}
-        value={range}
-        onChange={updateRange}
-      />
+      <Dropdown options={rangeOptions} value={range} onChange={updateRange} />
 
-      <Button className="form-field" label={btnSearchLabel} onClick={() => {}} />
+      <Button className="form-field" primary label={btnSearchLabel} onClick={() => {}} />
     </View>
   );
 }

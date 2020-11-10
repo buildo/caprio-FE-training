@@ -13,7 +13,7 @@ export function SearchResults() {
         <FormattedMessage id="Homepage.results.title" />
       </h2>
       {mockList.map(name => (
-        <View className="result-item" hAlignContent="center">
+        <View key={name} className="result-item" hAlignContent="center">
           - {name}
         </View>
       ))}
