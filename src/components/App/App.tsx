@@ -8,7 +8,7 @@ import { currentView } from '../../queries';
 import { config } from '../../config';
 
 import './app.scss';
-import { Divider } from 'buildo-react-components/lib';
+import Divider from '../Diveder/Divider';
 
 const queries = declareQueries({ currentView });
 
@@ -16,8 +16,8 @@ class App extends React.Component<typeof queries.Props> {
   render() {
     return (
       <View column className="app layout">
-        <View column hAlignContent="center" grow>
-          <h1>{config.title}</h1>
+        <View column hAlignContent="center" className="header" basis={300}>
+          <h1 className="title">{config.title}</h1>
           <SearchBar />
         </View>
         <Divider />
