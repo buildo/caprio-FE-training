@@ -1,47 +1,29 @@
-/*
+import * as React from 'react';
+import View from '../View';
+import { SearchBar } from '../SearchBar/SearchBar';
+import { SearchResults } from '../SearchResults/SearchResults';
 
-This component is the entry point for our app.
-It must be named exactly `App` and live in the `components/App` folder.
-Typical tasks performed in this component are:
-- general app layout
-- choosing the correct component to render based on the current view
+import { declareQueries } from 'avenger/lib/react';
+import { currentView } from '../../queries';
+import { config } from '../../config';
 
-In this simple example it does a bit of both.
-
-*/
-
-import * as React from "react";
-import View from "../View";
-import SwitchViewDropdown from "../SwitchViewDropdown";
-import Hello from "../Hello";
-import { declareQueries } from "avenger/lib/react";
-import { currentView } from "../../queries";
-import { constNull } from "fp-ts/lib/function";
-import * as queryResult from "avenger/lib/QueryResult";
-import { pipe } from "fp-ts/lib/pipeable";
-import { config } from "../../config";
-
-import "./app.scss";
+import './app.scss';
+import { Divider } from 'buildo-react-components/lib';
 
 const queries = declareQueries({ currentView });
 
 class App extends React.Component<typeof queries.Props> {
   render() {
     return (
-      <View column className="app">
-        <h1>{config.title}</h1>
-        <SwitchViewDropdown />
-        {pipe(
-          this.props.queries,
-          queryResult.fold(constNull, constNull, ({ currentView }) => {
-            switch (currentView) {
-              case "hello":
-                return <Hello />;
-              case "home":
-                return null;
-            }
-          })
-        )}
+      <View column className="app layout">
+        <View column hAlignContent="center" grow>
+          <h1>{config.title}</h1>
+          <SearchBar />
+        </View>
+        <Divider />
+        <View grow>
+          <SearchResults />
+        </View>
       </View>
     );
   }
