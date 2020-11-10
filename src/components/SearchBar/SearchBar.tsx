@@ -2,19 +2,24 @@ import * as React from 'react';
 
 import Input from '../SearchInput/SearchInput';
 import Button from '../SearchButton/SearchButton';
-
 import Dropdown from '../Dropdown';
 import View from '../View/View';
-import { RangeList, RangeOption, SearchBarState } from '../../model';
+import {
+  RangeList,
+  RangeOption,
+  SearchBarProps,
+  SearchBarFieldState,
+  SearchBarValidationState
+} from '../../model';
 import { useIntl } from 'react-intl';
+import validateAddress from '../SearchBar/SearchBarInputValidator';
 
 import './searchbar.scss';
 
 const RANGES: Array<number> = [1, 5, 10, 15, 25, 35, 50];
 
-export function SearchBar() {
+export function SearchBar({ onSubmit }: SearchBarProps) {
   const intl = useIntl();
-
   const btnSearchLabel = intl.formatMessage({ id: 'SearchBar.button.search.cta' });
   const locationSearchPlaceholder = intl.formatMessage({
     id: 'SearchBar.input.location.placeholder'
@@ -25,29 +30,56 @@ export function SearchBar() {
     label: intl.formatMessage({ id: 'SearchBar.dropdown.range.label' }, { range: value })
   }));
 
-  const [{ location, range }, setSearchParams] = React.useState<SearchBarState>({
+  const DEFAULT_SETTINGS = {
     location: '',
     range: rangeOptions[0]
+  };
+
+  const [searchParamsStatus, setSearchParams] = React.useState<SearchBarFieldState>(
+    DEFAULT_SETTINGS
+  );
+  const [{ locationFieldError }, setValidation] = React.useState<SearchBarValidationState>({
+    locationFieldError: false
   });
 
-  const updateLocation = (input: string) => setSearchParams({ location: input, range });
+  const updateLocation = (input: string) => {
+    setValidation({ locationFieldError: false });
+    setSearchParams({
+      ...searchParamsStatus,
+      location: input
+    });
+  };
 
   const updateRange = (rangeInput: RangeOption) =>
-    setSearchParams({ location: location, range: rangeInput });
+    setSearchParams({
+      ...searchParamsStatus,
+      range: rangeInput
+    });
+
+  const showValidationError = () => {
+    setValidation({ locationFieldError: true });
+    setSearchParams(DEFAULT_SETTINGS);
+  };
 
   return (
     <View vAlignContent="center" basis={300} className="search-bar">
       <Input
-        className="form-field location-input"
+        className={`form-field location-input ${locationFieldError ? 'error-focus' : ''}`}
         label="Location"
         placeholder={locationSearchPlaceholder}
-        value={location}
+        value={searchParamsStatus.location}
         onChange={updateLocation}
       />
 
-      <Dropdown options={rangeOptions} value={range} onChange={updateRange} />
+      <Dropdown options={rangeOptions} value={searchParamsStatus.range} onChange={updateRange} />
 
-      <Button className="form-field" primary label={btnSearchLabel} onClick={() => {}} />
+      <Button className="form-field" primary label={btnSearchLabel} onClick={handleSubmit} />
     </View>
   );
+
+  function handleSubmit(): void {
+    return validateAddress(searchParamsStatus.location)
+      ? onSubmit(searchParamsStatus.location, searchParamsStatus.range.value)
+      : showValidationError();
+  }
 }

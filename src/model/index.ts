@@ -23,11 +23,15 @@ export type RangeOption = {
 
 export type RangeList = Array<RangeOption>;
 
-export type SearchBarState = {
-  location: string;
-  range: RangeOption;
+export type SearchBarFieldState = {
+    location: string;
+    range: RangeOption;
+};
+
+export type SearchBarValidationState = {
+   locationFieldError: boolean  
 };
 
 export type SearchBarProps = {
-  onSubmit: () => any;
+  onSubmit: (location: string, range: number) => void;
 };
