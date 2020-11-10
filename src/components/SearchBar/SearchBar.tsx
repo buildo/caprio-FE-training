@@ -3,8 +3,12 @@ import * as React from 'react';
 import { Input, Button } from 'buildo-react-components';
 import Dropdown from '../Dropdown';
 import View from '../View/View';
+import { RangeList, RangeOption, SearchBarState } from '../../model';
+import { useIntl } from 'react-intl';
 
-const rangeOptions = [
+import './searchbar.scss';
+
+const rangeOptions: RangeList = [
   { value: 1, label: '1 km' },
   { value: 5, label: '5 km' },
   { value: 10, label: '10 km' },
@@ -15,28 +19,41 @@ const rangeOptions = [
 ];
 
 export function SearchBar() {
+  const [{ location, range }, setSearchParams] = React.useState<SearchBarState>({
+    location: '',
+    range: rangeOptions[0]
+  });
+
+  const locationSearchPlaceholder = useIntl().formatMessage({
+    id: 'SearchBar.input.location.placeholder'
+  });
+
+  const btnSearchLabel = useIntl().formatMessage({
+    id: 'SearchBar.button.search.cta'
+  });
+
+  const updateLocation = (input: string) => setSearchParams({ location: input, range });
+
+  const updateRange = (rangeInput: RangeOption) =>
+    setSearchParams({ location: location, range: rangeInput });
+
   return (
-    <View hAlignContent="center" vAlignContent="center" basis={300} className="search-bar">
-      <form>
-        <View vAlignContent="center">
-          <Input label="" placeholder="" value="" onChange={() => {}} />
+    <View vAlignContent="center" basis={300} className="search-bar">
+      <Input
+        label="Location"
+        placeholder={locationSearchPlaceholder}
+        value={location}
+        onChange={updateLocation}
+      />
 
-          <Dropdown
-            options={rangeOptions}
-            value={{ value: 1, label: '1 km' }}
-            onChange={() => {}}
-          />
+      <Dropdown
+        className="form-field"
+        options={rangeOptions}
+        value={range}
+        onChange={updateRange}
+      />
 
-          <Button
-            label="Search"
-            flat
-            onClick={() => {
-              /*TODO : Handle Range changes*/
-            }}
-            style={{ margin: 10, width: 100 }}
-          />
-        </View>
-      </form>
+      <Button className="form-field" label={btnSearchLabel} onClick={() => {}} />
     </View>
   );
 }
