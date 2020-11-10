@@ -14,38 +14,29 @@ const rangeOptions = [
   { value: 50, label: '50 km' }
 ];
 
-const SearchBar: React.FC = () => {
+export function SearchBar() {
   return (
-    <View      
-      hAlignContent="center"
-      vAlignContent="center"
-      basis={300}
-      className="search-bar"
-    >
-      {
-        <form>
-          <View vAlignContent="center">
-            <Input label="" placeholder="" value="" onChange={() => {}} />
+    <View hAlignContent="center" vAlignContent="center" basis={300} className="search-bar">
+      <form>
+        <View vAlignContent="center">
+          <Input label="" placeholder="" value="" onChange={() => {}} />
 
-            <Dropdown
-              options={rangeOptions}
-              value={{ value: 1, label: '1 km' }}
-              onChange={() => {}}
-            />
+          <Dropdown
+            options={rangeOptions}
+            value={{ value: 1, label: '1 km' }}
+            onChange={() => {}}
+          />
 
-            <Button
-              label="Search"
-              flat
-              onClick={() => {
-                /*TODO : Handle Range changes*/
-              }}
-              style={{ margin: 10, width: 100 }}
-            />
-          </View>
-        </form>
-      }
+          <Button
+            label="Search"
+            flat
+            onClick={() => {
+              /*TODO : Handle Range changes*/
+            }}
+            style={{ margin: 10, width: 100 }}
+          />
+        </View>
+      </form>
     </View>
   );
-};
-
-export default SearchBar;
+}
