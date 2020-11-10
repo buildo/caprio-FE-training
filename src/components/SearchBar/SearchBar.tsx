@@ -16,7 +16,7 @@ const rangeOptions = [
 
 export function SearchBar() {
   return (
-    <View hAlignContent="center" vAlignContent="center" basis={300} className="search-bar">
+    <View hAlignContent="center" vAlignContent="center" basis="300" className="search-bar">
       <form>
         <View vAlignContent="center">
           <Input label="" placeholder="" value="" onChange={() => {}} />
