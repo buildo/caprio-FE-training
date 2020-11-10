@@ -36,7 +36,7 @@ export function SearchBar() {
     setSearchParams({ location: location, range: rangeInput });
 
   return (
-    <View vAlignContent="center" basis={400} className="search-bar">
+    <View vAlignContent="center" basis={300} className="search-bar">
       <Input
         className="form-field location-input"
         label="Location"

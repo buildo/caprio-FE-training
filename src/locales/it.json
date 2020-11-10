@@ -4,6 +4,6 @@
     "Homepage.results.title": "Search Results",
     "SearchBar.input.location.placeholder": "Insert your location ...",
     "SearchBar.button.search.cta": "Search",
-    "SearchBar.dropdown.range.label":"Km"
+    "SearchBar.dropdown.range.label": "{range} Km"
   }
 }
