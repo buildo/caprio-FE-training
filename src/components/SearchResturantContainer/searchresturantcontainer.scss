@@ -1,0 +1,11 @@
+@import '../../theme/main.scss';
+
+.search-resturant-container {
+  .title {
+    padding: 30px;
+    color: $ice;
+    text-transform: uppercase;
+    font-weight: $bold;
+    font-size: 3rem;
+  }
+}
