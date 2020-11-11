@@ -1,42 +1,99 @@
 import * as React from 'react';
 
-import { Input, Button } from 'buildo-react-components';
+import Input from '../SearchInput/SearchInput';
+import Button from '../SearchButton/SearchButton';
 import Dropdown from '../Dropdown';
+import Tooltip from '../TooltipError/ErrorTooltip';
 import View from '../View/View';
+import { RangeList, RangeOption, SearchBarFieldState, SearchBarValidationState } from '../../model';
+import { useIntl } from 'react-intl';
+import { validateAddress } from '../SearchBar/SearchBarInputValidator';
+import './searchbar.scss';
+import cx from 'classnames';
 
-const rangeOptions = [
-  { value: 1, label: '1 km' },
-  { value: 5, label: '5 km' },
-  { value: 10, label: '10 km' },
-  { value: 15, label: '15 km' },
-  { value: 25, label: '25 km' },
-  { value: 35, label: '35 km' },
-  { value: 50, label: '50 km' }
-];
+type SearchBarProps = {
+  onSubmit: (location: string, range: number) => void;
+};
 
-export function SearchBar() {
+const RANGES: Array<number> = [1, 5, 10, 15, 25, 35, 50];
+
+export function SearchBar({ onSubmit }: SearchBarProps) {
+  const intl = useIntl();
+  const searchLabelCta = intl.formatMessage({ id: 'SearchBar.button.search.cta' });
+  const locationSearchPlaceholderMsg = intl.formatMessage({
+    id: 'SearchBar.input.location.placeholder'
+  });
+  const validationErrorMsg = intl.formatMessage({
+    id: 'SearchBar.input.location.validation.error.invalid'
+  });
+
+  const rangeOptions: RangeList = RANGES.map(value => ({
+    value: value,
+    label: intl.formatMessage({ id: 'SearchBar.dropdown.range.label' }, { range: value })
+  }));
+
+  const DEFAULT_SETTINGS = {
+    location: '',
+    range: rangeOptions[0]
+  };
+
+  const [searchParamsStatus, setSearchParams] = React.useState<SearchBarFieldState>(
+    DEFAULT_SETTINGS
+  );
+  const [{ locationFieldError }, setValidation] = React.useState<SearchBarValidationState>({
+    locationFieldError: false
+  });
+
+  const updateLocation = (input: string) => {
+    setValidation({ locationFieldError: false });
+    setSearchParams({
+      ...searchParamsStatus,
+      location: input
+    });
+  };
+
+  const updateRange = (rangeInput: RangeOption) =>
+    setSearchParams({
+      ...searchParamsStatus,
+      range: rangeInput
+    });
+
+  const showValidationError = () => setValidation({ locationFieldError: true });
+
+  const handleSubmit = () =>
+    validateAddress(searchParamsStatus.location)
+      ? onSubmit(searchParamsStatus.location, searchParamsStatus.range.value)
+      : showValidationError();
+
   return (
-    <View hAlignContent="center" vAlignContent="center" basis={300} className="search-bar">
-      <form>
-        <View vAlignContent="center">
-          <Input label="" placeholder="" value="" onChange={() => {}} />
+    <View vAlignContent="center" basis={300} className="search-bar">
+      <Tooltip
+        size="big"
+        className="error-tooltip"
+        popover={{
+          position: 'bottom',
+          anchor: 'center',
+          content: validationErrorMsg,
+          isOpen: locationFieldError
+        }}
+      >
+        <Input
+          className={cx('form-field', 'location-input', { 'error-focus': locationFieldError })}
+          label="Location"
+          placeholder={locationSearchPlaceholderMsg}
+          value={searchParamsStatus.location}
+          onChange={updateLocation}
+        />
+      </Tooltip>
 
-          <Dropdown
-            options={rangeOptions}
-            value={{ value: 1, label: '1 km' }}
-            onChange={() => {}}
-          />
+      <Dropdown
+        className="form-field"
+        options={rangeOptions}
+        value={searchParamsStatus.range}
+        onChange={updateRange}
+      />
 
-          <Button
-            label="Search"
-            flat
-            onClick={() => {
-              /*TODO : Handle Range changes*/
-            }}
-            style={{ margin: 10, width: 100 }}
-          />
-        </View>
-      </form>
+      <Button className="form-field" primary label={searchLabelCta} onClick={handleSubmit} />
     </View>
   );
 }

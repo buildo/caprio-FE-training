@@ -1,6 +1,11 @@
 {
   "locales": ["en"],
   "messages": {
-    "Homepage.results.title": "Search Results"    
+    "Homepage.title": "Yelp clone app",
+    "Homepage.results.title": "Search Results",
+    "SearchBar.input.location.placeholder": "Insert your location ...",
+    "SearchBar.button.search.cta": "Search",
+    "SearchBar.dropdown.range.label": "{range} Km",
+    "SearchBar.input.location.validation.error.invalid": "Insert a valid location name"
   }
 }

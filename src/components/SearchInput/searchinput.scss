@@ -1,0 +1,6 @@
+@import '../../theme/variables.scss';
+@import '~buildo-react-components/src/Input/Input.scss';
+
+.error-focus {
+  border: 4px solid $strawberry;
+}
