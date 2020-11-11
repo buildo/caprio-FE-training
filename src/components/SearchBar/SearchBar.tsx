@@ -13,8 +13,8 @@ import {
 } from '../../model';
 import { useIntl } from 'react-intl';
 import validateAddress from '../SearchBar/SearchBarInputValidator';
-
 import './searchbar.scss';
+import cx from 'classnames';
 
 const RANGES: Array<number> = [1, 5, 10, 15, 25, 35, 50];
 
@@ -61,25 +61,29 @@ export function SearchBar({ onSubmit }: SearchBarProps) {
     setSearchParams(DEFAULT_SETTINGS);
   };
 
+  const handleSubmit = () =>
+    validateAddress(searchParamsStatus.location)
+      ? onSubmit(searchParamsStatus.location, searchParamsStatus.range.value)
+      : showValidationError();
+
   return (
     <View vAlignContent="center" basis={300} className="search-bar">
       <Input
-        className={`form-field location-input ${locationFieldError ? 'error-focus' : ''}`}
+        className={cx('form-field', 'location-input', { 'error-focus': locationFieldError })}
         label="Location"
         placeholder={locationSearchPlaceholder}
         value={searchParamsStatus.location}
         onChange={updateLocation}
       />
 
-      <Dropdown options={rangeOptions} value={searchParamsStatus.range} onChange={updateRange} />
+      <Dropdown
+        className="form-field"
+        options={rangeOptions}
+        value={searchParamsStatus.range}
+        onChange={updateRange}
+      />
 
       <Button className="form-field" primary label={btnSearchLabel} onClick={handleSubmit} />
     </View>
   );
-
-  function handleSubmit(): void {
-    return validateAddress(searchParamsStatus.location)
-      ? onSubmit(searchParamsStatus.location, searchParamsStatus.range.value)
-      : showValidationError();
-  }
 }
