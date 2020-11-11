@@ -7,7 +7,7 @@ import Tooltip from '../TooltipError/ErrorTooltip';
 import View from '../View/View';
 import { RangeList, RangeOption, SearchBarFieldState, SearchBarValidationState } from '../../model';
 import { useIntl } from 'react-intl';
-import validateAddress from '../SearchBar/SearchBarInputValidator';
+import { validateAddress } from '../SearchBar/SearchBarInputValidator';
 import './searchbar.scss';
 import cx from 'classnames';
 

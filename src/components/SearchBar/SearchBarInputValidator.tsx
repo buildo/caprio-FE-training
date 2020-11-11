@@ -1,3 +1,1 @@
-const validateAddress = (value: string) => value && !/^\s*$/.test(value.trim());
-
-export default validateAddress;
+export const validateAddress = (value: string) => value && !/^\s*$/.test(value.trim());
