@@ -31,7 +31,3 @@ export type SearchBarFieldState = {
 export type SearchBarValidationState = {
    locationFieldError: boolean  
 };
-
-export type SearchBarProps = {
-  onSubmit: (location: string, range: number) => void;
-};

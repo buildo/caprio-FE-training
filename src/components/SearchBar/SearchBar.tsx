@@ -3,26 +3,28 @@ import * as React from 'react';
 import Input from '../SearchInput/SearchInput';
 import Button from '../SearchButton/SearchButton';
 import Dropdown from '../Dropdown';
+import Tooltip from '../TooltipError/ErrorTooltip';
 import View from '../View/View';
-import {
-  RangeList,
-  RangeOption,
-  SearchBarProps,
-  SearchBarFieldState,
-  SearchBarValidationState
-} from '../../model';
+import { RangeList, RangeOption, SearchBarFieldState, SearchBarValidationState } from '../../model';
 import { useIntl } from 'react-intl';
 import validateAddress from '../SearchBar/SearchBarInputValidator';
 import './searchbar.scss';
 import cx from 'classnames';
 
+type SearchBarProps = {
+  onSubmit: (location: string, range: number) => void;
+};
+
 const RANGES: Array<number> = [1, 5, 10, 15, 25, 35, 50];
 
 export function SearchBar({ onSubmit }: SearchBarProps) {
   const intl = useIntl();
-  const btnSearchLabel = intl.formatMessage({ id: 'SearchBar.button.search.cta' });
-  const locationSearchPlaceholder = intl.formatMessage({
+  const searchLabelCta = intl.formatMessage({ id: 'SearchBar.button.search.cta' });
+  const locationSearchPlaceholderMsg = intl.formatMessage({
     id: 'SearchBar.input.location.placeholder'
+  });
+  const validationErrorMsg = intl.formatMessage({
+    id: 'SearchBar.input.location.validation.error.invalid'
   });
 
   const rangeOptions: RangeList = RANGES.map(value => ({
@@ -56,10 +58,7 @@ export function SearchBar({ onSubmit }: SearchBarProps) {
       range: rangeInput
     });
 
-  const showValidationError = () => {
-    setValidation({ locationFieldError: true });
-    setSearchParams(DEFAULT_SETTINGS);
-  };
+  const showValidationError = () => setValidation({ locationFieldError: true });
 
   const handleSubmit = () =>
     validateAddress(searchParamsStatus.location)
@@ -68,13 +67,24 @@ export function SearchBar({ onSubmit }: SearchBarProps) {
 
   return (
     <View vAlignContent="center" basis={300} className="search-bar">
-      <Input
-        className={cx('form-field', 'location-input', { 'error-focus': locationFieldError })}
-        label="Location"
-        placeholder={locationSearchPlaceholder}
-        value={searchParamsStatus.location}
-        onChange={updateLocation}
-      />
+      <Tooltip
+        size="big"
+        className="error-tooltip"
+        popover={{
+          position: 'bottom',
+          anchor: 'center',
+          content: validationErrorMsg,
+          isOpen: locationFieldError
+        }}
+      >
+        <Input
+          className={cx('form-field', 'location-input', { 'error-focus': locationFieldError })}
+          label="Location"
+          placeholder={locationSearchPlaceholderMsg}
+          value={searchParamsStatus.location}
+          onChange={updateLocation}
+        />
+      </Tooltip>
 
       <Dropdown
         className="form-field"
@@ -83,7 +93,7 @@ export function SearchBar({ onSubmit }: SearchBarProps) {
         onChange={updateRange}
       />
 
-      <Button className="form-field" primary label={btnSearchLabel} onClick={handleSubmit} />
+      <Button className="form-field" primary label={searchLabelCta} onClick={handleSubmit} />
     </View>
   );
 }

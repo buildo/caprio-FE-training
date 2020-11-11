@@ -1,0 +1,16 @@
+@import '../../theme/variables.scss';
+
+@import '~buildo-react-components/src/Tooltip/Tooltip.scss';
+
+.popover-content.position-bottom.anchor-center.tooltip {
+  border-bottom-color: $strawberry;
+  top: 65px;
+
+  &.is-dark {
+    background: $strawberry;
+  }
+
+  &.position-bottom.is-dark::after {
+    border-bottom-color: $strawberry;
+  }
+}
