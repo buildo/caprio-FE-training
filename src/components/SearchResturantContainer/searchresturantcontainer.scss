@@ -8,4 +8,12 @@
     font-weight: $bold;
     font-size: 3rem;
   }
+
+  .header {
+    background-image: url('./food-yelp-header.jpg');
+    background-color: $coolBlue;
+    background-size: cover;
+    background-position: 50%;
+  }
+  
 }
