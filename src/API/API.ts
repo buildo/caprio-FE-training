@@ -15,7 +15,7 @@ export type YelpError = { type: 'YelpError'; code: string; description: string }
 export type AppErrors = ApiError | YelpError;
 export const genericError: ApiError = { type: 'Generic' };
 
-const LOCAL_PROXY_YELP_API = 'http://localhost:3000';
+const PROXY_YELP_API = config.yelp_proxy;
 const requestInit: RequestInit = {
   method: 'GET',
   headers: {
@@ -60,7 +60,7 @@ export const searchResturant = (params: {
     taskEither.tryCatch(
       () =>
         fetch(
-          `${LOCAL_PROXY_YELP_API}/businesses/search?term=restaurants&location=${params.location}&radius=${params.range}&limit=10`,
+          `${PROXY_YELP_API}/businesses/search?term=restaurants&location=${params.location}&radius=${params.range}&limit=10`,
           requestInit
         ).then(extractResponseBody),
       () => genericError
