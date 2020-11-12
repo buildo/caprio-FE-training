@@ -6,9 +6,10 @@ import { failure } from 'io-ts/lib/PathReporter';
 
 const Config = t.type(
   {
-    REACT_APP_TITLE: NonEmptyString
+    REACT_APP_TITLE: NonEmptyString,
+    REACT_APP_YELP_API_TOKEN: NonEmptyString
   },
-  'Config'
+  'Env-Config'
 );
 
 export const config = pipe(
@@ -20,8 +21,7 @@ export const config = pipe(
     },
     env => ({
       title: env.REACT_APP_TITLE,
-      yelpApiToken:
-        'FNb9av3yURUIV4MaesYKJuERgYx7RinwDthj4b2MyRqZ4dsAFzS9f6QtvV1Dc4-6vAjOkExMxpJNvL9lp9nRRmLOjeSVfIOzuo7lF1dGCc0jAs9J4bCrWvAtExmrX3Yx'
+      yelpApiToken: env.REACT_APP_YELP_API_TOKEN
     })
   )
 );
