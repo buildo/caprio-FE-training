@@ -1,6 +1,7 @@
 import * as t from 'io-ts';
 import { pipe } from 'fp-ts/lib/pipeable';
 import { taskEither, either } from 'fp-ts';
+import { TaskEither } from 'fp-ts/TaskEither';
 import { failure } from 'io-ts/lib/PathReporter';
 import { config } from '../config';
 import {
@@ -23,22 +24,13 @@ const requestInit: RequestInit = {
   }
 };
 
-const decodingGenericError = (errors: t.Errors): ApiError => {
+const getGenericError = (errors: t.Errors): ApiError => {
   const description = failure(errors).join(' - ');
   return { type: 'Decoding', description: description };
 };
 
-const extractResponseBody = (res: Response): Promise<{ status: number; body: any }> =>
-  res.json().then(body => ({ status: res.status, body }));
-
-const decodingSuccessResponse: (
-  res: unknown
-) => taskEither.TaskEither<AppErrors, YelpAPIResponseT> = res => {
-  return pipe(
-    YelpAPIResponse.decode(res),
-    either.mapLeft(decodingGenericError),
-    taskEither.fromEither
-  );
+const decodingSuccessResponse: (res: unknown) => TaskEither<AppErrors, YelpAPIResponseT> = res => {
+  return pipe(YelpAPIResponse.decode(res), either.mapLeft(getGenericError), taskEither.fromEither);
 };
 
 const decodingYelpError = (errRes: YelpAPIErrorResponseT): AppErrors =>
@@ -55,14 +47,14 @@ const decodingYelpError = (errRes: YelpAPIErrorResponseT): AppErrors =>
 export const searchResturant = (params: {
   location: string;
   range: number;
-}): taskEither.TaskEither<AppErrors, YelpAPIResponseT> =>
+}): TaskEither<AppErrors, YelpAPIResponseT> =>
   pipe(
     taskEither.tryCatch(
       () =>
         fetch(
           `${PROXY_YELP_API}/businesses/search?term=restaurants&location=${params.location}&radius=${params.range}&limit=10`,
           requestInit
-        ).then(extractResponseBody),
+        ).then(res => res.json().then(body => ({ status: res.status, body }))),
       () => genericError
     ),
     taskEither.chain(({ status, body }) =>
