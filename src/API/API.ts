@@ -3,9 +3,16 @@ import { pipe } from 'fp-ts/lib/pipeable';
 import { taskEither, either } from 'fp-ts';
 import { failure } from 'io-ts/lib/PathReporter';
 import { config } from '../config';
-import { YelpAPIResponse, YelpAPIResponseT } from '../model/yelp/yelp';
+import {
+  YelpAPIErrorResponse,
+  YelpAPIErrorResponseT,
+  YelpAPIResponse,
+  YelpAPIResponseT
+} from '../model/yelp/yelp';
 
 export type ApiError = { type: 'Generic' } | { type: 'Decoding'; description: string };
+export type YelpError = { type: 'YelpError'; code: string; description: string };
+export type AppErrors = ApiError | YelpError;
 export const genericError: ApiError = { type: 'Generic' };
 
 const LOCAL_PROXY_YELP_API = 'http://localhost:3000';
@@ -16,27 +23,49 @@ const requestInit: RequestInit = {
   }
 };
 
-const decodingResponse: (res: any) => taskEither.TaskEither<ApiError, YelpAPIResponseT> = res =>
-  pipe(YelpAPIResponse.decode(res), either.mapLeft(decodingError), taskEither.fromEither);
-
-const decodingError = (errors: t.Errors): ApiError => {
+const decodingGenericError = (errors: t.Errors): ApiError => {
   const description = failure(errors).join(' - ');
   return { type: 'Decoding', description: description };
 };
 
+const extractResponseBody = (res: Response): Promise<{ status: number; body: any }> =>
+  res.json().then(body => ({ status: res.status, body }));
+
+const decodingSuccessResponse: (
+  res: unknown
+) => taskEither.TaskEither<AppErrors, YelpAPIResponseT> = res => {
+  return pipe(
+    YelpAPIResponse.decode(res),
+    either.mapLeft(decodingGenericError),
+    taskEither.fromEither
+  );
+};
+
+const decodingYelpError = (errRes: YelpAPIErrorResponseT): AppErrors =>
+  pipe(
+    YelpAPIErrorResponse.decode(errRes),
+    either.map(res => ({
+      type: 'YelpError' as const,
+      code: res.error.code,
+      description: res.error.description
+    })),
+    either.getOrElseW(() => genericError)
+  );
+
 export const searchResturant = (params: {
   location: string;
   range: number;
-}): taskEither.TaskEither<ApiError, YelpAPIResponseT> =>
+}): taskEither.TaskEither<AppErrors, YelpAPIResponseT> =>
   pipe(
     taskEither.tryCatch(
       () =>
         fetch(
           `${LOCAL_PROXY_YELP_API}/businesses/search?term=restaurants&location=${params.location}&radius=${params.range}&limit=10`,
           requestInit
-        ).then(res => res.json()),
-      either.toError
+        ).then(extractResponseBody),
+      () => genericError
     ),
-    taskEither.mapLeft(() => genericError),
-    taskEither.chain(decodingResponse)
+    taskEither.chain(({ status, body }) =>
+      status === 200 ? decodingSuccessResponse(body) : taskEither.left(decodingYelpError(body))
+    )
   );

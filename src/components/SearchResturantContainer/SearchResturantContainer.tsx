@@ -4,14 +4,15 @@ import { WithQueries } from 'avenger/lib/react';
 import { SearchBar } from '../SearchBar/SearchBar';
 import { FormattedMessage } from 'react-intl';
 
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+// import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import View from '../View/View';
 import Divider from '../Diveder/Divider';
 import { searchResturantQuery } from '../../queries/queries';
 
 import './searchresturantcontainer.scss';
-import { ApiError } from '../../API';
+import { AppErrors } from '../../API';
 import { SearchResults } from '../SearchResults/SearchResults';
+import { ErrorMsg } from '../ErrorMsg/ErrorMsg';
 
 export function SearchResturantContainer() {
   const [params, setParams] = React.useState<{ location: string; range: number }>({
@@ -22,7 +23,7 @@ export function SearchResturantContainer() {
   const performSearch = async (location: string, range: number) =>
     setParams({ location: location, range: range });
 
-  const provideLoader = () => <LoadingSpinner size={45} className="loader-overlay" />;
+  const provideLoader = () => <View>Loading...</View>;
 
   const provideResults = () =>
     !params.location ? (
@@ -35,27 +36,24 @@ export function SearchResturantContainer() {
         params={{ searchResturantQuery: { location: params.location, range: params.range } }}
         render={QR.fold(
           provideLoader,
-          (error: ApiError) => (
-            <View grow>
-              <FormattedMessage id="SearchContainer.error.generic" />
-              {error.type === 'Decoding' ? (
-                <h2>{`${error.type} - ${JSON.stringify(error.description)}.`}</h2>
-              ) : (
-                <h1>{`${JSON.stringify(error.type)}`}</h1>
-              )}
-            </View>
+          (error: AppErrors) => (
+            <ErrorMsg content={error} location={params.location} />
           ),
           res => (
             <View column hAlignContent="center" grow>
-              <h1>{`Found ${JSON.stringify(res.searchResturantQuery.total)} resturants`}</h1>
+              <FormattedMessage
+                id="SearchContainer.search.term"
+                values={{
+                  location: `${params.location}`,
+                  total: res.searchResturantQuery.total
+                }}
+              />
               <SearchResults />
             </View>
           )
         )}
       />
     );
-
-  // TODO : handle error -->  {"error": {"code": "LOCATION_NOT_FOUND", "description": "Could not execute search, try specifying a more exact location."}}
 
   return (
     <View className="search-resturant-container" column grow>
