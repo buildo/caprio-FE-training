@@ -5,7 +5,8 @@ export const ResturantLocation = t.partial({
   display_address: t.array(t.string)
 });
 
-export const Business = t.partial({
+export const Business = t.type({
+  location: ResturantLocation,
   display_phone: t.string,
   distance: t.number,
   id: t.string,
@@ -16,7 +17,7 @@ export const Business = t.partial({
   url: t.string
 });
 
-export const YelpAPIResponse = t.partial({
+export const YelpAPIResponse = t.type({
   businesses: t.array(Business),
   total: t.number
 });
