@@ -1,6 +1,6 @@
 import * as t from 'io-ts';
 
-export const ResturantLocation = t.partial({
+export const ResturantLocation = t.type({
   city: t.string,
   display_address: t.array(t.string)
 });
@@ -31,5 +31,5 @@ export const YelpAPIErrorResponse = t.type({
   error: ErrMsg
 });
 
-export type YelpAPIResponseT = t.TypeOf<typeof YelpAPIResponse>;
-export type YelpAPIErrorResponseT = t.TypeOf<typeof YelpAPIErrorResponse>;
+export type YelpAPIResponse = t.TypeOf<typeof YelpAPIResponse>;
+export type YelpAPIErrorResponse = t.TypeOf<typeof YelpAPIErrorResponse>;

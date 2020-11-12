@@ -4,12 +4,8 @@ import { taskEither, either } from 'fp-ts';
 import { TaskEither } from 'fp-ts/TaskEither';
 import { failure } from 'io-ts/lib/PathReporter';
 import { config } from '../config';
-import {
-  YelpAPIErrorResponse,
-  YelpAPIErrorResponseT,
-  YelpAPIResponse,
-  YelpAPIResponseT
-} from '../model/yelp/yelp';
+import { YelpAPIErrorResponse, YelpAPIResponse } from '../model/yelp/yelp';
+
 
 export type ApiError = { type: 'Generic' } | { type: 'Decoding'; description: string };
 export type YelpError = { type: 'YelpError'; code: string; description: string };
@@ -29,11 +25,11 @@ const getGenericError = (errors: t.Errors): ApiError => {
   return { type: 'Decoding', description: description };
 };
 
-const decodingSuccessResponse: (res: unknown) => TaskEither<AppErrors, YelpAPIResponseT> = res => {
+const decodingSuccessResponse: (res: unknown) => TaskEither<AppErrors, YelpAPIResponse> = res => {
   return pipe(YelpAPIResponse.decode(res), either.mapLeft(getGenericError), taskEither.fromEither);
 };
 
-const decodingYelpError = (errRes: YelpAPIErrorResponseT): AppErrors =>
+const decodingYelpError = (errRes: YelpAPIErrorResponse): AppErrors =>
   pipe(
     YelpAPIErrorResponse.decode(errRes),
     either.map(res => ({
@@ -47,7 +43,7 @@ const decodingYelpError = (errRes: YelpAPIErrorResponseT): AppErrors =>
 export const searchResturant = (params: {
   location: string;
   range: number;
-}): TaskEither<AppErrors, YelpAPIResponseT> =>
+}): TaskEither<AppErrors, YelpAPIResponse> =>
   pipe(
     taskEither.tryCatch(
       () =>
