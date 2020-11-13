@@ -12,9 +12,9 @@ export function ErrorMsg(props: { content: AppErrors; location: string }) {
   const renderErrMsg = () =>
     props.content.type === 'YelpError' ? (
       <FormattedMessage
-        id={getMsgIdFromYelpApiErrorCode(props.content as YelpError)}
+        id={getMsgIdFromYelpApiErrorCode(props.content)}
         values={{
-          msg: `${(props.content as YelpError).description}`,
+          msg: `${props.content.description}`,
           location: `${props.location}`
         }}
       />
