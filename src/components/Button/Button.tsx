@@ -1,3 +1,3 @@
 import { Button }  from 'buildo-react-components';
-import './searchbutton.scss';
+import './button.scss';
 export default Button ;

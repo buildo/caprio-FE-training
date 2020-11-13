@@ -9,9 +9,10 @@
     "SearchBar.input.location.validation.error.invalid": "Insert a valid location name",
     "SearchContainer.error.generic": "Generic Error",
     "SearchContainer.error.notfound": "Impossible to found resturant: {msg}",
-    "SearchContainer.empty.list": "Empty list",
-    "SearchContainer.search.term": "Resturant result for {location} - {total} ",
-    "YelpApiErrorCode.LOCATION_NOT_FOUND": "Please specificy the correct location Name, ' {location} ' is not valid term",
-    "YelpApiErrorCode.GENERIC": "Something was wrong with Yelp !"
+    "SearchContainer.empty.list": "Start your search ... ",
+    "SearchContainer.search.term": "Found {total} Resturant for : \"{location}\" ",
+    "YelpApiErrorCode.LOCATION_NOT_FOUND": "Please specificy the correct location Name, \"{location}\" is not valid term",
+    "YelpApiErrorCode.GENERIC": "Something was wrong with Yelp !",
+    "ResturantCard.telephone": "Telephone"
   }
 }
