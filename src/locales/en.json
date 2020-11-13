@@ -15,6 +15,6 @@
     "SearchContainer.result.prev.button.label": "PREV",
     "YelpApiErrorCode.LOCATION_NOT_FOUND": "Please specificy the correct location Name, \"{location}\" is not valid term",
     "YelpApiErrorCode.GENERIC": "Something was wrong with Yelp !",
-    "ResturantCard.telephone": "Telephone"
+    "RestaurantCard.telephone": "Telephone"
   }
 }
