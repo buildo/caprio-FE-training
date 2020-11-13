@@ -1,7 +1,7 @@
-@import "~normalize-scss/sass/normalize";
+@import '~normalize-scss/sass/normalize';
 @include normalize();
 
-@import "./variables.scss";
+@import './variables.scss';
 
 #root {
   width: 100%;
@@ -21,4 +21,9 @@
 .focused > * {
   outline: -webkit-focus-ring-color auto 5px;
   outline-color: $mediumBlue;
+}
+
+a {
+  color: black;
+  text-decoration: none;
 }
