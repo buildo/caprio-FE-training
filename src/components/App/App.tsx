@@ -12,7 +12,7 @@ const queries = declareQueries({ currentView });
 class App extends React.Component<typeof queries.Props> {
   render() {
     return (
-      <View column className="app layout">        
+      <View className="app layout">
         <SearchResturantContainer />
       </View>
     );

@@ -15,7 +15,7 @@ type SearchBarProps = {
   onSubmit: (location: string, range: number) => void;
 };
 
-const RANGES: Array<number> = [1, 5, 10, 15, 25, 35, 50];
+const RANGES: Array<number> = [1000, 5000, 10000, 15000, 25000, 35000, 40000];
 
 export function SearchBar({ onSubmit }: SearchBarProps) {
   const intl = useIntl();
@@ -29,7 +29,7 @@ export function SearchBar({ onSubmit }: SearchBarProps) {
 
   const rangeOptions: RangeList = RANGES.map(value => ({
     value: value,
-    label: intl.formatMessage({ id: 'SearchBar.dropdown.range.label' }, { range: value })
+    label: intl.formatMessage({ id: 'SearchBar.dropdown.range.label' }, { range: value/1000 })
   }));
 
   const DEFAULT_SETTINGS = {
