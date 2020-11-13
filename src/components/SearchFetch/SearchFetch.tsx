@@ -30,7 +30,7 @@ export function SearchFetch(props: { location: string; range: number }) {
     page > 0 ? setPage({ page: page - 1 }) : setPage({ page: 0 });
 
   const nextPage = (page: number, total: number) => {
-    if (curPageIsLast(page, total)) {
+    if (!curPageIsLast(page, total)) {
       setPage({ page: page + 1 });
     }
   };
@@ -45,11 +45,10 @@ export function SearchFetch(props: { location: string; range: number }) {
     !curPage.page ? '' : <Button onClick={() => prevPage(curPage.page)} label={prevLabel} />;
 
   const renderNextButton = (total: number) =>
-    curPageIsLast(curPage.page, total) ? (
+    curPageIsLast(curPage.page, total) && (
       <Button label={nextLabel} onClick={() => nextPage(curPage.page, total)} />
-    ) : (
-      ''
-    );
+    ) 
+
 
   return !props.location ? (
     <View className="message-empty-list" grow>
