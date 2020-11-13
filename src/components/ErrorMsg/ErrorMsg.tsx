@@ -22,5 +22,9 @@ export function ErrorMsg(props: { content: AppErrors; location: string }) {
       <FormattedMessage id="App.internalError" />
     );
 
-  return <View className={cx('message-container', 'animate-msg')}> {renderErrMsg()}</View>;
+  return (
+    <View className={cx('message-container', 'animate-msg')} vAlignContent="center" height={250}>
+      {renderErrMsg()}
+    </View>
+  );
 }
