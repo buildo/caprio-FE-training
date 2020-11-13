@@ -33,3 +33,4 @@ export const YelpAPIErrorResponse = t.type({
 
 export type YelpAPIResponse = t.TypeOf<typeof YelpAPIResponse>;
 export type YelpAPIErrorResponse = t.TypeOf<typeof YelpAPIErrorResponse>;
+export type Business = t.TypeOf<typeof Business>;
