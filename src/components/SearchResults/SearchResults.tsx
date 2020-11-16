@@ -1,22 +1,23 @@
 import React from 'react';
 import View from '../View';
-import { FormattedMessage } from 'react-intl';
+import Divider from '../Diveder/Divider';
 
 import './searchresults.scss';
+import { YelpAPIResponse } from '../../model/yelp/yelp';
+import { RestaurantCard } from '../ResturantCard/ResturantCard';
 
-const mockList: string[] = ['Item 1', 'Item 2', 'Item 3'];
 
-export function SearchResults() {
+export function SearchResults(props: YelpAPIResponse) {
   return (
-    <View className="search-results" column hAlignContent="center" grow>
-      <h2 className="container-title">
-        <FormattedMessage id="Homepage.results.title" />
-      </h2>
-      {mockList.map(name => (
-        <View key={name} className="result-item" hAlignContent="center">
-          - {name}
-        </View>
-      ))}
+    <View className="search-results" column hAlignContent="center">
+      <View column style={{ paddingLeft: 20 }}>
+        {props.businesses.map(business => (
+          <View column>
+            <RestaurantCard key={business.id} business={business} />
+            <Divider />
+          </View>
+        ))}
+      </View>
     </View>
   );
 }

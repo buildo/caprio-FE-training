@@ -20,15 +20,17 @@ export function SearchResturantContainer() {
 
   return (
     <View className="search-resturant-container" column grow>
-      <View column hAlignContent="center" basis={400} className="header">
-        <View className="title">
+      <View column vAlignContent="center" hAlignContent="center" basis={300} className="header">
+        <View className="title" hAlignContent="center">
           <FormattedMessage id="Homepage.title" />
         </View>
         <SearchBar onSubmit={performSearch} />
       </View>
       <Divider />
-      <View column hAlignContent="center" grow>
-        <SearchFetch {...params} />
+      <View column hAlignContent="center">
+        <View height={600} className="search-content" hAlignContent="center">
+          <SearchFetch {...params} />
+        </View>
       </View>
     </View>
   );

@@ -6,13 +6,16 @@ import { failure } from 'io-ts/lib/PathReporter';
 import { config } from '../config';
 import { YelpAPIErrorResponse, YelpAPIResponse } from '../model/yelp/yelp';
 
-
 export type ApiError = { type: 'Generic' } | { type: 'Decoding'; description: string };
 export type YelpError = { type: 'YelpError'; code: string; description: string };
 export type AppErrors = ApiError | YelpError;
 export const genericError: ApiError = { type: 'Generic' };
 
+export const PAGE_SIZE_CONFIG = 10;
+
 const PROXY_YELP_API = config.yelp_proxy;
+const SEARCH_API_PATH = '/businesses/search'
+
 const requestInit: RequestInit = {
   method: 'GET',
   headers: {
@@ -43,17 +46,25 @@ const decodingYelpError = (errRes: YelpAPIErrorResponse): AppErrors =>
 export const searchResturant = (params: {
   location: string;
   range: number;
+  page: number;
 }): TaskEither<AppErrors, YelpAPIResponse> =>
   pipe(
     taskEither.tryCatch(
       () =>
-        fetch(
-          `${PROXY_YELP_API}/businesses/search?term=restaurants&location=${params.location}&radius=${params.range}&limit=10`,
-          requestInit
-        ).then(res => res.json().then(body => ({ status: res.status, body }))),
+        fetch(UrlBuilder(params), requestInit).then(res =>
+          res.json().then(body => ({ status: res.status, body }))
+        ),
       () => genericError
     ),
     taskEither.chain(({ status, body }) =>
       status === 200 ? decodingSuccessResponse(body) : taskEither.left(decodingYelpError(body))
     )
   );
+
+
+function UrlBuilder(params: { location: string; range: number; page: number }): RequestInfo {
+  const offsetParam = params.page ? params.page * PAGE_SIZE_CONFIG : 0;
+  return `${PROXY_YELP_API}${SEARCH_API_PATH}?term=restaurants&location=${params.location}&radius=${params.range}&offset=${offsetParam}&limit=${PAGE_SIZE_CONFIG}`;
+}
+
+

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import Input from '../SearchInput/SearchInput';
-import Button from '../SearchButton/SearchButton';
+import Button from '../Button/Button';
 import Dropdown from '../Dropdown';
 import Tooltip from '../TooltipError/ErrorTooltip';
 import View from '../View/View';
