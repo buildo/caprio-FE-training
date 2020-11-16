@@ -15,8 +15,10 @@ import './searchfetch.scss';
 import { PAGE_SIZE_CONFIG } from '../../API/API';
 
 export function SearchFetch(props: { location: string; range: number }) {
+  const FIRST_PAGE = 0;
+
   const [curPage, setPage] = React.useState<{ page: number }>({
-    page: 0
+    page: FIRST_PAGE
   });
 
   const intl = useIntl();
@@ -24,10 +26,10 @@ export function SearchFetch(props: { location: string; range: number }) {
   const prevLabel = intl.formatMessage({ id: 'SearchContainer.result.prev.button.label' });
 
   const curPageIsLast = (page: number, total: number) =>
-    page < Math.ceil(total / PAGE_SIZE_CONFIG) - 1;
+    page === Math.ceil(total / PAGE_SIZE_CONFIG) - 1;
 
   const prevPage = (page: number) =>
-    page > 0 ? setPage({ page: page - 1 }) : setPage({ page: 0 });
+    page > FIRST_PAGE ? setPage({ page: page - 1 }) : setPage({ page: FIRST_PAGE });
 
   const nextPage = (page: number, total: number) => {
     if (!curPageIsLast(page, total)) {
@@ -42,13 +44,14 @@ export function SearchFetch(props: { location: string; range: number }) {
   );
 
   const renderPrevButton = () =>
-    !curPage.page ? '' : <Button onClick={() => prevPage(curPage.page)} label={prevLabel} />;
+    curPage.page != FIRST_PAGE && (
+      <Button onClick={() => prevPage(curPage.page)} label={prevLabel} />
+    );
 
   const renderNextButton = (total: number) =>
-    curPageIsLast(curPage.page, total) && (
+    !curPageIsLast(curPage.page, total) && (
       <Button label={nextLabel} onClick={() => nextPage(curPage.page, total)} />
-    ) 
-
+    );
 
   return !props.location ? (
     <View className="message-empty-list" grow>
